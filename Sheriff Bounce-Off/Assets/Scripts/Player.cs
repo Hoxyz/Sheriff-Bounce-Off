@@ -19,11 +19,16 @@ public class Player : MonoBehaviour {
     }
     // Update is called once per frame
     void FixedUpdate() {
-        if (animator.GetBool("Shooting") == false) {
-            rb2d.velocity = moveDir * speed * Time.deltaTime;
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Player_Shoot_Up")       ||
+            animator.GetCurrentAnimatorStateInfo(0).IsName("Player_Shoot_AngleUp")  ||
+            animator.GetCurrentAnimatorStateInfo(0).IsName("Player_Shoot_Side")     ||
+            animator.GetCurrentAnimatorStateInfo(0).IsName("Player_Shoot_AngleDown")||
+            animator.GetCurrentAnimatorStateInfo(0).IsName("Player_Shoot_Down")) {
+
+            //rb2d.velocity = Vector2.zero;
         }
         else {
-            rb2d.velocity = Vector2.zero;
+            rb2d.velocity = moveDir * speed * Time.deltaTime;
         }
         transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y + collider.offset.y);
     }
@@ -56,7 +61,7 @@ public class Player : MonoBehaviour {
 
     private void Shoot() {
         if (Input.GetKeyDown(KeyCode.Space)) {
-            animator.SetBool("Shooting", true);
+            animator.SetTrigger("Shooting");
         }
     }
 
