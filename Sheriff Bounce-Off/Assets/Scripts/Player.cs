@@ -9,6 +9,7 @@ public class Player : MonoBehaviour {
 
     private Collider2D collider;
     private Vector2 moveDir;
+    private Vector2 lastMoveDir;
     private Rigidbody2D rb2d;
     private SpriteRenderer spriteRenderer;
 
@@ -48,8 +49,9 @@ public class Player : MonoBehaviour {
         animator.SetFloat("Speed", moveDir.SqrMagnitude());
 
         if (inputX != 0f || inputY != 0f) {
-            animator.SetInteger("LastHorizontal", (int)inputX);
-            animator.SetInteger("LastVertical", (int)inputY);
+            lastMoveDir = new Vector2(inputX, inputY);
+            animator.SetInteger("LastHorizontal", (int)lastMoveDir.x);
+            animator.SetInteger("LastVertical", (int)lastMoveDir.y);
         }
         if (animator.GetInteger("LastHorizontal") == -1) {
             spriteRenderer.flipX = true;
@@ -62,6 +64,8 @@ public class Player : MonoBehaviour {
     private void Shoot() {
         if (Input.GetKeyDown(KeyCode.Space)) {
             animator.SetTrigger("Shooting");
+            float angle = Mathf.Atan2(lastMoveDir.y, lastMoveDir.x) * Mathf.Rad2Deg;
+            Instantiate(bulletPrefab, transform.position, Quaternion.Euler(0f, 0f, angle));
         }
     }
 
