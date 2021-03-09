@@ -3,6 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour {
+
+    // Movement
+    public KeyCode keyLeft;
+    public KeyCode keyUp;
+    public KeyCode keyRight;
+    public KeyCode keyDown;
+    public KeyCode keyShoot;
+    public KeyCode keyMirror;
+    public KeyCode keyBomb;
+
+    public int maxBullets = 6;
     public float speed = 5f;
     public Animator animator;
     public GameObject bulletPrefab;
@@ -13,10 +24,14 @@ public class Player : MonoBehaviour {
     private Rigidbody2D rb2d;
     private SpriteRenderer spriteRenderer;
 
+    private List<GameObject> bullets;
+
     private void Start() {
         rb2d = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         collider = GetComponent<Collider2D>();
+
+        bullets = new List<GameObject>();
     }
     // Update is called once per frame
     void FixedUpdate() {
@@ -26,7 +41,7 @@ public class Player : MonoBehaviour {
             animator.GetCurrentAnimatorStateInfo(0).IsName("Player_Shoot_AngleDown")||
             animator.GetCurrentAnimatorStateInfo(0).IsName("Player_Shoot_Down")) {
 
-            //rb2d.velocity = Vector2.zero;
+            rb2d.velocity = Vector2.zero;
         }
         else {
             rb2d.velocity = moveDir * speed * Time.deltaTime;
@@ -40,8 +55,8 @@ public class Player : MonoBehaviour {
     }
 
     private void Move() {
-        float inputX = Input.GetAxisRaw("Horizontal");
-        float inputY = Input.GetAxisRaw("Vertical");
+        float inputX = Input.GetKey(keyLeft) ? -1f : Input.GetKey(keyRight) ? 1f : 0f;
+        float inputY = Input.GetKey(keyDown) ? -1f : Input.GetKey(keyUp) ? 1f : 0f;
 
         moveDir = new Vector2(inputX, inputY).normalized;
         animator.SetFloat("Horizontal", inputX);
@@ -62,11 +77,22 @@ public class Player : MonoBehaviour {
     }
 
     private void Shoot() {
-        if (Input.GetKeyDown(KeyCode.Space)) {
+        if (Input.GetKeyDown(keyShoot)) {
             animator.SetTrigger("Shooting");
             float angle = Mathf.Atan2(lastMoveDir.y, lastMoveDir.x) * Mathf.Rad2Deg;
-            Instantiate(bulletPrefab, transform.position, Quaternion.Euler(0f, 0f, angle));
+            GameObject bulletObj;
+            if (bullets.Count < maxBullets) {
+                bulletObj = Instantiate(bulletPrefab, transform.position, Quaternion.Euler(0f, 0f, angle));
+                bullets.Add(bulletObj);
+            }
+            else {
+                bulletObj = bullets[maxBullets - 1];
+                bullets.RemoveAt(maxBullets - 1);
+                bullets.Insert(0, bulletObj);
+                bulletObj.transform.position = transform.position;
+                bulletObj.transform.eulerAngles = new Vector3(0f, 0f, angle);
+            }
+            bulletObj.GetComponent<Bullet>().SetFiringVelocity();
         }
     }
-
 }

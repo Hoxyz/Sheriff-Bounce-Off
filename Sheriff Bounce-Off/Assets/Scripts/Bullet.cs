@@ -8,8 +8,11 @@ public class Bullet : MonoBehaviour {
 
     private Rigidbody2D rb2d;
 
-    private void Start() {
+    private void Awake() {
         rb2d = GetComponent<Rigidbody2D>();
+    }
+
+    public void SetFiringVelocity() {
         rb2d.velocity = transform.right * speed * Time.deltaTime;
     }
 
@@ -19,5 +22,6 @@ public class Bullet : MonoBehaviour {
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         rb2d.velocity = transform.right * speed * Time.deltaTime;
         Debug.DrawRay(transform.position, rb2d.velocity);
+        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y);
     }
 }
