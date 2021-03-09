@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1671425094681776843}
   - component: {fileID: 1671425094681776842}
   - component: {fileID: 7874311219088231416}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cactus_Big1
   m_TagString: Environment
   m_Icon: {fileID: 0}

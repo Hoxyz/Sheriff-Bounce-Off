@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6711997951836047177}
   - component: {fileID: 6711997951836047178}
   - component: {fileID: 2510437969770051699}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Bucket
   m_TagString: Environment
   m_Icon: {fileID: 0}

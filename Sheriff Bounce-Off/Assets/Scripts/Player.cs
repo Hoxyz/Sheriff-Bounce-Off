@@ -17,6 +17,7 @@ public class Player : MonoBehaviour {
     public float speed = 5f;
     public Animator animator;
     public GameObject bulletPrefab;
+    public GameObject bulletDeathAnimationPrefab;
 
     private Collider2D collider;
     private Vector2 moveDir;
@@ -87,12 +88,25 @@ public class Player : MonoBehaviour {
             }
             else {
                 bulletObj = bullets[maxBullets - 1];
+                GameObject animObj = Instantiate(bulletDeathAnimationPrefab, bulletObj.transform.position, Quaternion.identity);
+                Destroy(animObj, 0.25f);
                 bullets.RemoveAt(maxBullets - 1);
                 bullets.Insert(0, bulletObj);
                 bulletObj.transform.position = transform.position;
                 bulletObj.transform.eulerAngles = new Vector3(0f, 0f, angle);
             }
             bulletObj.GetComponent<Bullet>().SetFiringVelocity();
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision) {
+        if (collision.gameObject.tag == "Bullet") {
+            if (gameObject.tag == "Player") {
+                print("DED");
+            }
+            else {
+                print("BOP");
+            }
         }
     }
 }

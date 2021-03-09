@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5309643271537783873}
   - component: {fileID: 5309643271537783874}
   - component: {fileID: 8486514841454724600}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Rock_Gray_Small1
   m_TagString: Environment
   m_Icon: {fileID: 0}

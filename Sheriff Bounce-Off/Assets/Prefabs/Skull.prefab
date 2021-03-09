@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3384072878729206166}
   - component: {fileID: 3384072878729206165}
   - component: {fileID: 3620077470844837724}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Skull
   m_TagString: Environment
   m_Icon: {fileID: 0}
