@@ -7,9 +7,14 @@ public class Bullet : MonoBehaviour {
     public float speed;
 
     private Rigidbody2D rb2d;
+    private SpriteRenderer spriteRenderer;
+
+    public Sprite bulletBlueSprite;
+    public Sprite bulletRedSprite;
 
     private void Awake() {
         rb2d = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     public void SetFiringVelocity() {
@@ -24,4 +29,18 @@ public class Bullet : MonoBehaviour {
         Debug.DrawRay(transform.position, rb2d.velocity);
         transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y);
     }
+
+    public void SwitchBullet() {
+        if (gameObject.tag == "BulletBlue") {
+            gameObject.tag = "BulletRed";
+            gameObject.layer = LayerMask.NameToLayer("BulletRed");
+            spriteRenderer.sprite = bulletRedSprite;
+        }
+        else if (gameObject.tag == "BulletRed") {
+            gameObject.tag = "BulletBlue";
+            gameObject.layer = LayerMask.NameToLayer("BulletBlue");
+            spriteRenderer.sprite = bulletBlueSprite;
+        }
+    }
+
 }

@@ -11,5 +11,4 @@ public class GameManager : MonoBehaviour {
             item.transform.position += new Vector3(0f, 0f, item.transform.position.y + itemCollider.offset.y);
         }
     }
-
 }

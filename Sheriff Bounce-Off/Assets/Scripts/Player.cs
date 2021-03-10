@@ -15,22 +15,27 @@ public class Player : MonoBehaviour {
 
     public int maxBullets = 6;
     public float speed = 5f;
+    public float mirrorDuration = 0.5f;
+    public float mirrorCooldown = 2f;
     public Animator animator;
     public GameObject bulletPrefab;
     public GameObject bulletDeathAnimationPrefab;
+    public GameObject mirror;
 
+    private bool canUseMirror = true;
     private Collider2D collider;
     private Vector2 moveDir;
     private Vector2 lastMoveDir;
     private Rigidbody2D rb2d;
     private SpriteRenderer spriteRenderer;
-
-    private List<GameObject> bullets;
+    private SpriteMask mirrorSpriteMask;
+    public List<GameObject> bullets;
 
     private void Start() {
         rb2d = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         collider = GetComponent<Collider2D>();
+        mirrorSpriteMask = mirror.GetComponent<SpriteMask>();
 
         bullets = new List<GameObject>();
     }
@@ -40,7 +45,8 @@ public class Player : MonoBehaviour {
             animator.GetCurrentAnimatorStateInfo(0).IsName("Player_Shoot_AngleUp")  ||
             animator.GetCurrentAnimatorStateInfo(0).IsName("Player_Shoot_Side")     ||
             animator.GetCurrentAnimatorStateInfo(0).IsName("Player_Shoot_AngleDown")||
-            animator.GetCurrentAnimatorStateInfo(0).IsName("Player_Shoot_Down")) {
+            animator.GetCurrentAnimatorStateInfo(0).IsName("Player_Shoot_Down")     ||
+            gameObject.tag == "Mirror") {
 
             rb2d.velocity = Vector2.zero;
         }
@@ -53,6 +59,43 @@ public class Player : MonoBehaviour {
     private void Update() {
         Move();
         Shoot();
+        if (Input.GetKeyDown(keyMirror)) {
+            StartCoroutine(Mirror());
+        }
+        RemoveOpponentsBullets();
+    }
+    
+    IEnumerator Mirror() {
+        string tag = gameObject.tag;
+        if (canUseMirror) {
+            canUseMirror = false;
+            float t = 0f;
+            while (t < mirrorDuration) {
+                t += Time.deltaTime;
+                mirror.SetActive(true);
+                gameObject.tag = "Mirror";
+                mirrorSpriteMask.sprite = spriteRenderer.sprite;
+                if (spriteRenderer.flipX) {
+                    mirror.transform.localScale = new Vector3(-1f, 1f, 1f);
+                }
+                else {
+                    mirror.transform.localScale = new Vector3(1f, 1f, 1f);
+                }
+                yield return null;
+            }
+            gameObject.tag = tag;
+            mirror.SetActive(false);
+            StartCoroutine(MirrorCooldown());
+        }
+    }
+
+    IEnumerator MirrorCooldown() {
+        float t = 0f;
+        while (t < mirrorCooldown) {
+            t += Time.deltaTime;
+            yield return null;
+        }
+        canUseMirror = true;
     }
 
     private void Move() {
@@ -99,13 +142,22 @@ public class Player : MonoBehaviour {
         }
     }
 
+    private void RemoveOpponentsBullets() {
+        for (int i = bullets.Count - 1; i >= 0; i--) {
+            if (gameObject.tag == "PlayerRed" && bullets[i].tag == "BulletBlue" ||
+                gameObject.tag == "PlayerBlue" && bullets[i].tag == "BulletRed") {
+                bullets.Remove(bullets[i]);
+            }
+        }
+    }
+
     private void OnCollisionEnter2D(Collision2D collision) {
-        if (collision.gameObject.tag == "Bullet") {
-            if (gameObject.tag == "Player") {
+        if (collision.gameObject.tag == "BulletBlue" || collision.gameObject.tag == "BulletRed") {
+            if (gameObject.tag == "PlayerRed" || gameObject.tag == "PlayerBlue") {
                 print("DED");
             }
             else {
-                print("BOP");
+                collision.gameObject.GetComponent<Bullet>().SwitchBullet();
             }
         }
     }

@@ -6,7 +6,10 @@ TagManager:
   tags:
   - Environment
   - Mirror
-  - Bullet
+  - BulletRed
+  - BulletBlue
+  - PlayerBlue
+  - PlayerRed
   layers:
   - Default
   - TransparentFX
