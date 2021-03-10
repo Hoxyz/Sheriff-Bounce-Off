@@ -26,7 +26,7 @@ public class Bullet : MonoBehaviour {
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         rb2d.velocity = transform.right * speed * Time.deltaTime;
-        Debug.DrawRay(transform.position, rb2d.velocity);
+        //Debug.DrawRay(transform.position, rb2d.velocity);
         transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y);
     }
 
