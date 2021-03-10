@@ -1,13 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
-    
-    public KeyCode keyLeft;
-    public KeyCode keyUp;
-    public KeyCode keyRight;
-    public KeyCode keyDown;
 
     private Vector2 moveDir;
     private Vector2 lastMoveDir;
@@ -15,9 +11,19 @@ public class PlayerController : MonoBehaviour {
     private Collider2D collider;
     private SpriteRenderer spriteRenderer;
     private Animator animator;
-
-    public float speed = 5f;
-    public GameObject playerDeathAnimationPrefab;
+    
+    [SerializeField]
+    private KeyCode keyLeft;
+    [SerializeField]
+    private KeyCode keyUp;
+    [SerializeField]
+    private KeyCode keyRight;
+    [SerializeField]
+    private KeyCode keyDown;
+    [SerializeField]
+    private float speed = 5f;
+    [SerializeField]
+    private GameObject playerDeathAnimationPrefab;
 
     public Vector2 getLastMoveDir() {
         return lastMoveDir;
@@ -77,6 +83,7 @@ public class PlayerController : MonoBehaviour {
             if (gameObject.tag == "PlayerRed" || gameObject.tag == "PlayerBlue") {
                 GameObject animObj = Instantiate(playerDeathAnimationPrefab, transform.position, Quaternion.identity);
                 animObj.GetComponent<SpriteRenderer>().color = spriteRenderer.color;
+                GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().GoToStartScene(2f, gameObject.tag);
                 Destroy(gameObject);
             }
             else {
@@ -84,5 +91,4 @@ public class PlayerController : MonoBehaviour {
             }
         }
     }
-
 }

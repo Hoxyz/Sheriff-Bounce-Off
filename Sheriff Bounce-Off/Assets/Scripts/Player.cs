@@ -4,23 +4,31 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
-    public KeyCode keyShoot;
-    public KeyCode keyMirror;
-    public KeyCode keyBomb;
-
-    public int maxBullets = 6;
-    public float mirrorDuration = 0.5f;
-    public float mirrorCooldown = 2f;
-    public GameObject bulletPrefab;
-    public GameObject bulletDeathAnimationPrefab;
-    public GameObject mirror;
+    [SerializeField]
+    private KeyCode keyShoot;
+    [SerializeField]
+    private KeyCode keyMirror;
+    [SerializeField]
+    private KeyCode keyBomb;
+    [SerializeField]
+    private int maxBullets = 6;
+    [SerializeField]
+    private float mirrorDuration = 0.5f;
+    [SerializeField]
+    private float mirrorCooldown = 2f;
+    [SerializeField]
+    private GameObject bulletPrefab;
+    [SerializeField]
+    private GameObject bulletDeathAnimationPrefab;
+    [SerializeField]
+    private GameObject mirror;
 
     private bool canUseMirror = true;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
     private SpriteMask mirrorSpriteMask;
     private PlayerController playerController;
-    public List<GameObject> bullets;
+    private List<GameObject> bullets;
 
     private void Start() {
         playerController = GetComponent<PlayerController>();

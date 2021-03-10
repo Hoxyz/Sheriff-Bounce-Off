@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour {
 
-    public float speed;
-
     private Rigidbody2D rb2d;
     private SpriteRenderer spriteRenderer;
 
-    public Sprite bulletBlueSprite;
-    public Sprite bulletRedSprite;
+    [SerializeField]
+    private float speed;
+    [SerializeField]
+    private Sprite bulletBlueSprite;
+    [SerializeField]
+    private Sprite bulletRedSprite;
 
     private void Awake() {
         rb2d = GetComponent<Rigidbody2D>();

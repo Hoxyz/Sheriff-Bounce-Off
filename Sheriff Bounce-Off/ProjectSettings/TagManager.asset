@@ -10,6 +10,7 @@ TagManager:
   - BulletBlue
   - PlayerBlue
   - PlayerRed
+  - GameManager
   layers:
   - Default
   - TransparentFX

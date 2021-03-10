@@ -1,13 +1,33 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
-    public GameObject sandTile;
-    public GameObject tileParent;
-    public GameObject mirror;
-    public GameObject mirrorParent;
+    [SerializeField]
+    private GameObject sandTile;
+    [SerializeField]
+    private GameObject tileParent;
+    [SerializeField]
+    private GameObject mirror;
+    [SerializeField]
+    private GameObject mirrorParent;
+    [SerializeField]
+    private Text winText;
+
+    public void GoToStartScene(float t, string tag) {
+        StartCoroutine(GoToStartSceneCoroutine(t, tag));
+    }
+
+    IEnumerator GoToStartSceneCoroutine(float t, string tag) {
+        string winner = tag == "PlayerBlue" ? "PlayerRed" : "PlayerBlue";
+        winText.text = winner + " wins!";
+        winText.gameObject.SetActive(true);
+        yield return new WaitForSeconds(2f);
+        SceneManager.LoadScene("StartScene");
+    }
 
     private void Start() {
         GameObject[] environmentObjects = GameObject.FindGameObjectsWithTag("Environment");
